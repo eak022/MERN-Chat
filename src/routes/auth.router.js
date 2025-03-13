@@ -12,7 +12,7 @@ import { protectedRoute } from "../middlewares/auth.middleware.js";
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
-router.put("/updateProfile", protectedRoute, updateProfile);
-router.get("/checkAuth", protectedRoute, checkAuth);
+router.put("/update-profile", protectedRoute, updateProfile);
+router.get("/check", checkAuth);
 
 export default router; // ส่งออก router เป็น default

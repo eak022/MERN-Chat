@@ -97,23 +97,48 @@ export const logout = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { profilePic } = req.body;
+    const { profilePicture } = req.body;
+    // Middleware needed
     const userId = req.user._id;
 
-    if (!profilePic) {
-      return res.status(400).json({ message: " profilePic is not required" });
+    if (!profilePicture) {
+      return res.status(400).json({ message: "Profile picture is required!" });
     }
-    const uploadResponse = await cloudinary.uploader.upload(profilePic);
+
+    const uploadResponse = await cloudinary.uploader.upload(profilePicture);
     if (!uploadResponse) {
-      return res.status(500).json({ message: " error while upload profile" });
+      res
+        .status(500)
+        .json({ message: "Error while updating profile picture!" });
     }
-    const updateUser = await User.findByIdAndUpdate(
+    const updatedUser = await UserModel.findByIdAndUpdate(
       userId,
-      { profilePic: uploadResponse.secure_url },
+      {
+        profilePicture: uploadResponse.secure_url,
+      },
       { new: true }
     );
+    if (updatedUser) {
+      res.status(200).json(updatedUser);
+    } else {
+      res
+        .status(500)
+        .json({ message: "Error while updating profile picture!" });
+    }
   } catch (error) {
-    console.error("Logout error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      message:
+        "Internal server error while registering new user!" || error.message,
+    });
+  }
+};
+
+export const checkAuth = async (req, res) => {
+  try {
+    res.status(200).json(req.user);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal server error While checkAuth" });
   }
 };

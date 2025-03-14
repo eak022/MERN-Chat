@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./lib/db.js";
 import authRouter from "./routes/auth.router.js";
-
+import messageRouter from "./routes/Message.router.js";
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -25,6 +25,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/message", messageRouter);
 
 app.listen(PORT, () => {
   console.log("Server is running on http://localhost:" + PORT);

@@ -1,17 +1,28 @@
+import { text } from "express";
 import mongoose from "mongoose";
-const { Schema, model } = mongoose; // Importing `model` along with `Schema`
+import { Schema } from "mongoose";
 
-const MessageSchema = new Schema(
+const messageSchema = new Schema(
   {
-    senderId: { type: String, required: true, unique: true },
-    recipientId: { type: String, required: true },
-    text: { type: String, required: true },
-    image: { type: String, required: true },
+    senderID: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+    receiverId: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+    text: {
+      type: String,
+    },
+    Image: {
+      type: String,
+    },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const MessageModel = model("Message", MessageSchema);
-export default MessageModel; // Changed from `module.exports` to ES6 export
+const Message = mongoose.model("Message", messageSchema);
+
+export default Message;
